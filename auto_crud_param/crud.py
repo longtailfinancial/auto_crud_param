@@ -40,7 +40,9 @@ class CRUDMultiSelect(MultiSelect):
         self.confirm_delete_button.on_click(self.confirm_delete)
 
         # Input for create/update
-        self.input_dialog = TextInput(name='Item', placeholder='Enter item here')
+        self.input_dialog = TextInput(
+            name='Create or Update Selected', placeholder='Enter item here'
+        )
 
     def panel(self):
         # Update the options of the MultiSelect widget whenever the crud_param changes
