@@ -1,8 +1,10 @@
+import panel as pn
 import param as pm
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from auto_crud_param import parameterized_to_model
+from auto_crud_param.crud import CRUDListParameter, CRUDMultiSelect
+from auto_crud_param.orm import parameterized_to_model
 
 Base = declarative_base()
 
@@ -19,3 +21,21 @@ AModel = parameterized_to_model(A, Base)
 engine = create_engine('sqlite:///mydatabase.db')
 Base.metadata.create_all(engine)
 Session = sessionmaker(bind=engine)
+
+
+class MyCRUDApp(pm.Parameterized):
+    # Example usage
+    crud_param = CRUDListParameter()
+
+    def __init__(self):
+        super().__init__()
+        self.crud_param.items = ['Item 1', 'Item 2', 'Item 3']  # Set initial items here
+        self.crud_widget = CRUDMultiSelect(self.crud_param)
+
+    def panel(self):
+        return pn.Row(self.crud_widget.panel())
+
+
+# Create and show the app
+app = MyCRUDApp()
+app.panel().servable()
